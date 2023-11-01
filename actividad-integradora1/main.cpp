@@ -145,7 +145,7 @@ tuple<int,int>manacher(string text) {
 }
 
 // longest common substring
-string encontrarSubstringComun(const string& texto1, const string& texto2) {
+string encontrarSubstringComun(string texto1, string texto2) {
     int m = texto1.size();
     int n = texto2.size();
     vector<vector<int>> matriz(m + 1, vector<int>(n + 1));
