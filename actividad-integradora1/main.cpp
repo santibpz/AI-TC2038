@@ -162,10 +162,38 @@ int** generaMatrizLcs(string first_text, string second_text) {
 
 // longest common substring
 
-// tuple<int, int>lcs(string first_text, string second_text) {
-//     int** lcs_mat = generaMatrizLcs(first_text, second_text);
+tuple<int, int> lcs(string first_text, string second_text) {
+    int** lcs_mat = generaMatrizLcs(first_text, second_text);
+    int max_length = 0;  // Longitud máxima del LCS
+    int ending_index = 0;  // Índice de finalización del LCS
 
-// }
+    // Itera a través de la matriz para encontrar el LCS
+    for (int i = 1; i < M; i++) {
+        for (int j = 1; j < N; j++) {
+            if (first_text[i - 1] == second_text[j - 1]) {
+                lcs_mat[i][j] = lcs_mat[i - 1][j - 1] + 1;
+                if (lcs_mat[i][j] > max_length) {
+                    max_length = lcs_mat[i][j];
+                    ending_index = i - 1;
+                }
+            } else {
+                lcs_mat[i][j] = 0;
+            }
+        }
+    }
+
+    // Calcula el índice de inicio del LCS
+    int starting_index = ending_index - max_length + 1;
+
+    // Libera la memoria de la matriz
+    for (int i = 0; i < M; i++) {
+        delete[] lcs_mat[i];
+    }
+    delete[] lcs_mat;
+
+    return make_tuple(starting_index, ending_index);
+}
+
 
 int main() {
 
