@@ -4,8 +4,26 @@
 #include <vector>
 #include <string>
 #include <tuple>
+#include <fstream>
 
 using namespace std;
+
+// función auxiliar para leer un archivo de texto y almacenar el contenido en una variable
+string leeArchivo(string filename) {
+    ifstream file(filename);
+    string content;
+    
+    // leemos el archivo
+    if (file.is_open()) {
+        string line;
+        while (getline(file, line)) {
+            content += line;
+        }
+        file.close();
+    }
+    return content; // retornamos el archivo
+}
+
 
 // preprocesamiento del patron con la función que encuentra el sufijo más largo que también sea prefijo
 // longest preffix suffix
@@ -126,75 +144,58 @@ tuple<int,int>manacher(string text) {
 
 }
 
-
-int M, N;
-
-int** generaMatrizLcs(string first_text, string second_text) {
-    int smallest;
-    string str1 = "$" + first_text;
-    string str2 = "$" + second_text;
-    
-    M = str1.length();
-    N = str2.length();
-
-    int** mat = new int*[M];
-
-    for(int i = 0; i < M; i++) {
-        mat[i] = new int[N];
-        mat[i][0] = 0;
-    }
-    
-
-    for(int i = 0; i < N; i++) {
-        mat[0][i] = 0;
-    }
-
-    for(int i = 0; i < M; i++) {
-        for(int j = 0; j < N; j++) {
-            cout << mat[i][j] << " " << endl;
+    void muestraResultado(vector<string>transmissions, vector<string>mcodes) {
+        // verificamos si los códigos maliciosos se encuentran dentro de los archivos de transmisión
+        for(int i = 0; i < transmissions.size(); i++) {
+            cout << "Chequeo del archivo de transmision " << i+1 << "\n";
+            for(int j = 0; j < mcodes.size(); j++) {
+                int index = KMP(transmissions[i], mcodes[j]);
+                if(index == -1) cout << "False" << " " << "El codigo malicioso \"mcode" << j+1 << "\" NO se encuentra en el archivo \"transmission" << i+1 << "\"" << "\n";
+                else cout << "True" << " " << "El codigo malicioso \"mcode" << j+1 << "\" se encuentra en el archivo \"transmission" << i+1 << "\" empezando en el indice: " << index << "\n";
+            }
+            cout << endl;
         }
+
         cout << endl;
+
+        // verificamos si hay codigo espejeado en los archivos de transmisión
+        for(int i=0; i < transmissions.size(); i++) {
+                tuple<int,int>result = manacher(transmissions[i]); 
+                int start = get<0>(result);
+                int end = get<1>(result);
+                cout << "Archivo de transimision " << i + 1 << "\n";
+                cout << "Posicion inicial del palindromo mas largo encontrado: " << start << "\n";
+                cout << "Posicion final del palindromo mas largo encontrado: " << end << "\n";
+                cout << endl;
+        }
+
     }
 
-    return mat; 
-
-}
-
-// longest common substring
-
-// tuple<int, int>lcs(string first_text, string second_text) {
-//     int** lcs_mat = generaMatrizLcs(first_text, second_text);
-
-// }
 
 int main() {
 
-    // vector<int>V = lps("abcabc");
+    vector<string>transmissions;
+    vector<string>mcodes;
+    // archivos de transmisión
+    string transmission1 = leeArchivo("./transmission1.txt");
+    string transmission2 = leeArchivo("./transmission2.txt");
 
-    // for(int i = 0; i < V.size(); i++) {
-    //     cout << V[i] << " ";
-    // }
+    // archivos de código malicioso
+    string mcode1 = leeArchivo("./mcode1.txt");
+    string mcode2 = leeArchivo("./mcode2.txt");
+    string mcode3 = leeArchivo("./mcode3.txt");
 
-    // int index = KMP("xabcabxabcabcxmnsDiUHIABFAODBñCBUbsUFWudbAIUDausISDayduAiugdyusbdIEsabidindaifalfibfisubkjfdbiafbasfa", "ISDay");
+    // agregamos los archivos de transmisión al vector de transmisiones
+    transmissions.push_back(transmission1);
+    transmissions.push_back(transmission2);
 
-    // cout << "pattern is at: " << index;
+    // agregamos los archivos de codigo malicioso al vector mcodes
+    mcodes.push_back(mcode1);
+    mcodes.push_back(mcode2);
+    mcodes.push_back(mcode3);
 
-
-    // tuple<int,int>result = manacher("ssabccbaiq");
-    // // tuple<int,int>result = manacher("bxaeaabababaso");
-    // // manacher("lscmxsxaabbaqa");
-
-    // int start = get<0>(result);
-    // int end = get<1>(result);
-    // cout << endl;
-
-    // std::cout << "start of longest palindrome " << start << std::endl;
-    // std::cout << "end of longest palindrome: " << end << std::endl;
-
-
-    int** t = generaMatrizLcs("abba", "mana");
-
-
+    // llamamos la función que muestra los resultados del análisis para cada archivo de transmisión
+    muestraResultado(transmissions, mcodes);
 
     return 0;
 }
