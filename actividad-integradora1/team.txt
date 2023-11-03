@@ -1,5 +1,8 @@
 Mauricio Tumalán Castillo		| A01369288
 
+Apoyo en implementación de calculo de substring común más largo y en la implementación de Manacher, adición de la
+parte 2 a la función de muestraResultado() para la obtención del palindromo más largo en archivos de transmisión, 
+corrección de salidas de las funciones.
 
 Oswaldo Ilhuicatzi Mendizábal	| A01781988
 
