@@ -11,3 +11,4 @@ y arreglo de sintaxis, añadir función de trabajo de la misma parte del substri
 muestraResultado() para la obtención del substring más largo común entre los archivos de transmisión. 
 
 Santiago Benitez Pérez		    | A01782813
+Implementación de partes 1 y 2 dentro del código
