@@ -1,0 +1,10 @@
+Mauricio Tumalán Castillo		| A01369288
+
+
+Oswaldo Ilhuicatzi Mendizábal	| A01781988
+
+Implementación de la función de cálculo de substring común más largo entre archivos de transmisión
+y arreglo de sintaxis, añadir función de trabajo de la misma parte del substring (parte 3) en la función
+muestraResultado() para la obtención del substring más largo común entre los archivos de transmisión. 
+
+Santiago Benitez Pérez		    | A01782813
