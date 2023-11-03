@@ -172,8 +172,8 @@ string encontrarSubstringComun(string texto1, string texto2) {
             cout << "Chequeo del archivo de transmision " << i+1 << "\n";
             for(int j = 0; j < mcodes.size(); j++) {
                 int index = KMP(transmissions[i], mcodes[j]);
-                if(index == -1) cout << "False:" << " " << "El codigo malicioso \"mcode" << j+1 << "\" NO se encuentra en el archivo \"transmission" << i+1 << "\"" << "\n";
-                else cout << "True:" << " " << "El codigo malicioso \"mcode" << j+1 << "\" se encuentra en el archivo \"transmission" << i+1 << "\" empezando en el indice: " << index << "\n";
+                if(index == -1) cout << "False";
+                else cout << "True";
             }
             cout << endl;
         }
@@ -185,9 +185,9 @@ string encontrarSubstringComun(string texto1, string texto2) {
                 tuple<int,int>result = manacher(transmissions[i]); 
                 int start = get<0>(result);
                 int end = get<1>(result);
-                cout << "Archivo de transmision " << i + 1 << "\n";
-                cout << "Posicion inicial del palindromo mas largo encontrado: " << start << "\n";
-                cout << "Posicion final del palindromo mas largo encontrado: " << end << "\n";
+                cout << "Parte 2 " << "\n";
+                cout << start << "\n";
+                cout << end << "\n";
                 cout << endl;
         }
         
@@ -195,7 +195,7 @@ string encontrarSubstringComun(string texto1, string texto2) {
         if (transmissions.size() > 1) {
         for (int i = 1; i < transmissions.size(); i++) {
             string commonSubstring = encontrarSubstringComun(transmissions[0], transmissions[i]);
-            cout << "Substring comun mas largo entre archivos de transmision 1 y " << i + 1 << ": " << commonSubstring << "\n";
+            cout << commonSubstring << "\n";
         }
 }
 }
