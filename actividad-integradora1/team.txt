@@ -8,3 +8,5 @@ y arreglo de sintaxis, añadir función de trabajo de la misma parte del substri
 muestraResultado() para la obtención del substring más largo común entre los archivos de transmisión. 
 
 Santiago Benitez Pérez		    | A01782813
+
+Implementación del Knutt-Morris Pratt y desarrollo del planteamiento para resolver El problema de buscar el palindromo más largo en los archivos de transmisión.

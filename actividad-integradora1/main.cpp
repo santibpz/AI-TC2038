@@ -58,9 +58,10 @@ int KMP(string text, string pattern) {
     int i = 0, j = 0; 
 
     // iteramos sobre el texto
-    while(i < text.size()) {
+    while(i <= text.size()) {
         if(j == pattern.size()) {
-            return i - j; // si acabamos de recorrer el patron, entonces el patron ya se encontró en el texto y el indice en donde empieza el patron en el texto es i - j
+            return (i - j) + 1; // si acabamos de recorrer el patron, entonces el patron ya se encontró en el texto y el indice en donde empieza el patron en el texto es i - j
+            // agregamos + 1 para considerar que el string texto empieza en 1
         }
         if(text[i] == pattern[j]) { // si hay un match en los caracteres, seguimos checando los demás caracteres
             i++;
@@ -134,7 +135,7 @@ tuple<int,int>manacher(string text) {
    }
 
    // determinamos el indice en el que empieza el palindromo más largo conocido por la longitud más larga que se registra en el vector P
-   int startIndex = (centerIndex - maximumLengthP) / 2;
+   int startIndex = ((centerIndex - maximumLengthP) / 2) + 1;
    // determinamos el indice en el que termina el palindromo más largo
    int endIndex = (startIndex + maximumLengthP) - 1;
 
@@ -144,61 +145,82 @@ tuple<int,int>manacher(string text) {
 }
 
 // longest common substring
-string encontrarSubstringComun(string texto1, string texto2) {
+tuple<int,int>encontrarSubstringComun(string texto1, string texto2) {
     int m = texto1.size();
     int n = texto2.size();
-    vector<vector<int>> matriz(m + 1, vector<int>(n + 1));
-    int longitudMax = 0;
-    int finMax = 0;
 
+    // creamos una matriz de mxn en donde m es la longitud del texto 1 y n es la longitud del texto 2
+    vector<vector<int>> matriz(m + 1, vector<int>(n + 1));
+
+    // variable que almacena la longitud más grande del substring en común que se encuentre
+    int longitudMax = 0;
+    int maxI = 0;
+    int maxJ = 0;
+
+    // iteramos sobre la matriz comparando los caracteres de los textos
     for (int i = 1; i <= m; i++) {
         for (int j = 1; j <= n; j++) {
             if (texto1[i - 1] == texto2[j - 1]) {
                 matriz[i][j] = matriz[i - 1][j - 1] + 1;
                 if (matriz[i][j] > longitudMax) {
                     longitudMax = matriz[i][j];
-                    finMax = i;
+                    maxI = i;
+                    maxJ = j;
                 }
             }
         }
     }
+    
 
-    return texto1.substr(finMax - longitudMax, longitudMax);
+    // encontramos el indice en donde empieza el substring en común más largo para el primer texto
+    int endIndex = maxI; // el indice en donde termina el substring es el ultimo indice registrado en 'maxI'
+    while(matriz[maxI - 1][maxJ - 1] != 0) {
+        maxI--;
+        maxJ--;
+    }
+
+    int startIndex = maxI; // el indice en donde empieza el substring es el indice en donde termina 'maxI' después retroceder hacia atrás en la matriz en forma diagonal hasta encontrar un cero
+
+    return make_tuple(startIndex, endIndex);
+    
+    
 }
 
     void muestraResultado(vector<string>transmissions, vector<string>mcodes) {
         // verificamos si los códigos maliciosos se encuentran dentro de los archivos de transmisión
+        cout << "Parte 1" << "\n";
         for(int i = 0; i < transmissions.size(); i++) {
-            cout << "Chequeo del archivo de transmision " << i+1 << "\n";
             for(int j = 0; j < mcodes.size(); j++) {
                 int index = KMP(transmissions[i], mcodes[j]);
-                if(index == -1) cout << "False";
-                else cout << "True";
+                if(index == -1) cout << "False" << endl;
+                else cout << "True" << endl;
             }
             cout << endl;
         }
 
-        cout << endl;
-
         // verificamos si hay codigo espejeado en los archivos de transmisión
+        cout << "Parte 2" << "\n";
         for(int i=0; i < transmissions.size(); i++) {
                 tuple<int,int>result = manacher(transmissions[i]); 
                 int start = get<0>(result);
                 int end = get<1>(result);
-                cout << "Parte 2 " << "\n";
-                cout << start << "\n";
-                cout << end << "\n";
-                cout << endl;
+                cout << start << " " <<  end << "\n";
         }
+
+        cout << endl;
         
+        cout << "Parte 3" << "\n";
+
         // Encontrar el substring más largo común entre los archivos de transmisión
-        if (transmissions.size() > 1) {
-        for (int i = 1; i < transmissions.size(); i++) {
-            string commonSubstring = encontrarSubstringComun(transmissions[0], transmissions[i]);
-            cout << commonSubstring << "\n";
-        }
+        tuple<int,int>resultado = encontrarSubstringComun(transmissions[0], transmissions[1]);
+
+        int start = get<0>(resultado);
+        int end = get<1>(resultado);
+
+        cout << start << " " << end << endl;
+        
 }
-}
+
 
 int main()
 {
@@ -224,6 +246,8 @@ int main()
 
     // llamamos la función que muestra los resultados del análisis para cada archivo de transmisión
     muestraResultado(transmissions, mcodes);
+
+
 
     return 0;
 }
